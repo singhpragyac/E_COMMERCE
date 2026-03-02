@@ -1,38 +1,69 @@
-var login = () => {
-    <>
-        <div class="container">
-            <div class="row justify-content-center mt-5">
-                <div class="col-md-4">
-                    <div class="card shadow">
-                        <div class="card-header text-center">
-                            <h4>Login</h4>
-                        </div>
-                        <div class="card-body">
+import React, {useState} from "react";
+import axios from "axios";
+import { useNavigate, Link, useLocation } from "react-router-dom";
+import toast from "react-hot-toast";
+import Layout from "../../components/layout/layout";
+import { useAuth } from "../../Context/auth"
 
-                            <form method="POST" action="/login">
-                                
-                                <div class="mb-3">
-                                    <label class="form-label">Email</label>
-                                    <input type="email" name="email" class="form-control" placeholder="Enter email" required />
-                                </div>
+var Login = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");   
+    const [auth, setAuth] = useAuth();
 
-                                <div class="mb-3">
-                                    <label class="form-label">Password</label>
-                                    <input type="password" name="password" class="form-control" placeholder="Enter password" required />
-                                </div>
+    const navigate = useNavigate();
+    const location = useLocation();
 
-                                <div class="d-grid">
-                                    <button type="submit" class="btn btn-primary">Login</button>
-                                </div>
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-                            </form>
+        try {
+            const res = await axios.post("/api/v1/auth/login", {email, password});
+            if (res && res.data.success) {
+                toast.success(res.data && res.data.message);
+                setAuth({
+                    ...auth,
+                    user: res.data.user,
+                    token: res.data.token,
+                });
+                localStorage.setItem("auth", JSON.stringify(res.data));
+                navigate(location.state || "/");
+            } else {
+                toast.success(res.data.message);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("somthing went worng");
+        }
+    };
 
-                        </div>
-                    </div>
+    return (
+   
+        <Layout>
+        <div className="form-container" style={{minHeight: "90vh"}}>
+            <h4>Login Here</h4>
+            <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                    <label htmlFor="email" className="form-label">Email address</label>
+                    <input type="email" value={email} onChange={
+                                (e) => setEmail(e.target.value)} className="form-control" placeholder="Enter Your Email" required />
                 </div>
-            </div>
-        </div>
-    </>
-}
 
-export default login
+                <div className="mb-3">
+                    <label htmlFor="password" className="form-label">Password</label>
+                    <input type="password" value={password} onChange={
+                                (e) => setPassword(e.target.value)} className="form-control" placeholder="Enter Your Password" required />
+                </div>
+
+                <button type="submit" className="btn btn-primary ms-1">Login</button>
+            </form><br></br>
+            <Link to="/forgot" className="btn btn-danger ms-1">
+            Forgot Password
+            </Link>
+        </div>
+
+
+        </Layout>
+   );
+};
+
+export default Login;

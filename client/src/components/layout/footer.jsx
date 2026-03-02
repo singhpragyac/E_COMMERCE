@@ -1,16 +1,12 @@
-var footer = () => {
+import React from "react";
+var Footer = () => {
+  return (
     <>
-    <div class="card">
-  <div class="card-header">
-    Featured
-  </div>
-  <div class="card-body">
-    <h5 class="card-title">Special title treatment</h5>
-    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
-  </div>
-</div>
+    <footer style={{textAlign: "center",padding: "1px",background: "black",color:"white"}}>
+      © 2026 footer | All Rights Reserved
+    </footer>
     </>
-}
+  )
+};
 
-export default footer
+export default Footer;

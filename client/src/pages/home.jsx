@@ -8,5 +8,5 @@ var home = () => {
     </>
     </Layout>
     )
-}
-export default home
+};
+export default home;

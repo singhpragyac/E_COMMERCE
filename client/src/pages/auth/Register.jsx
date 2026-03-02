@@ -1,72 +1,92 @@
-var register = () => {
-    <>
-        <div class="row justify-content-center align-items-center vh-100">
-            <div class="col-md-5">
+import React, {useState} from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import Layout from "../../components/layout/layout";
 
-                <div class="card shadow-lg border-0 rounded-4">
-                    <div class="card-body p-4">
+const Register = () => {
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [phone, setPhone] = useState("");
+    const [address, setAddress] = useState("");
+    const [answer, setAnswer] = useState("");
 
-                        <h3 class="text-center mb-4">Register here</h3>
+    const navigate = useNavigate();
 
-                        <form method="POST" action="/register">
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-                            {/* Full Name */}
-                            <div class="mb-3">
-                                <label class="form-label">Full Name</label>
-                                <input type="text" name="fullname" 
-                                    class="form-control rounded-3" 
-                                    placeholder="Enter your full name" required />
-                            </div>
+        console.log({
+            name,
+            email,
+            password,
+            phone,
+            address,
+            answer
+            });
 
-                            {/* Email  */}
-                            <div class="mb-3">
-                                <label class="form-label">Email Address</label>
-                                <input type="email" name="email" 
-                                    class="form-control rounded-3" 
-                                    placeholder="Enter your email" required />
-                            </div>
+        try {
+            const res = await axios.post("/api/v1/auth/register", { name, email, password, phone, address, answer });
+            if (res && res.data.success) {
+                toast.success(res.data && res.data.message);
+                navigate("/login");
+            } else {
+                toast.error(res.data.message);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("somthing went worng");
+        }
+    };
 
-                            {/* Password  */}
-                            <div class="mb-3">
-                                <label class="form-label">Password</label>
-                                <input type="password" name="password" 
-                                    class="form-control rounded-3" 
-                                    placeholder="Enter password" required />
-                            </div>
-
-                            {/* Confirm Password  */}
-                            <div class="mb-3">
-                                <label class="form-label">Confirm Password</label>
-                                <input type="password" name="confirm_password" 
-                                    class="form-control rounded-3" 
-                                    placeholder="Confirm password" required />
-                            </div>
-
-                            {/* Submit Button  */}
-                            <div class="d-grid">
-                                <button type="submit" 
-                                        class="btn btn-success rounded-3">
-                                    Register
-                                </button>
-                            </div>
-
-                        </form>
-
-                        {/* Login Link  */}
-                        <div class="text-center mt-3">
-                            <small>
-                                Already have an account? 
-                                <a href="/login" class="text-decoration-none">Login</a>
-                            </small>
-                        </div>
-
-                    </div>
+    return (
+        <>
+        <div className="form-container" style={{minHeight: "90vh"}}>
+            <h4>Register form</h4>
+            <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                    {/* <label for="name" className="form-label">Full Name</label> */}
+                    <input type="text" value={name} onChange={
+                            (e) => setName(e.target.value)} className="form-control" placeholder="Enter Your Name" required autoFocus />
                 </div>
 
-            </div>
+                <div className="mb-3">
+                    {/* <label for="email" className="form-label">Email address</label> */}
+                    <input type="email" value={email} onChange={
+                            (e) => setEmail(e.target.value)} className="form-control" placeholder="Enter Your Email" required />
+                </div>
+
+                <div className="mb-3">
+                    {/* <label for="password" className="form-label">Password</label> */}
+                    <input type="password" value={password} onChange={
+                            (e) => setPassword(e.target.value)} className="form-control" placeholder="Enter Your Password" required />
+                </div>
+
+                <div className="mb-3">
+                    {/* <label for="phone" className="form-label">Phone</label> */}
+                    <input type="text" value={phone} onChange={
+                            (e) => setPhone(e.target.value)} className="form-control" placeholder="Enter Your Phone No." required />
+                </div>
+
+                <div className="mb-3">
+                    {/* <label for="address" className="form-label">Address</label> */}
+                    <input type="text" value={address} onChange={
+                            (e) => setAddress(e.target.value)} className="form-control" placeholder="Enter Your Address" required />
+                </div>
+
+                <div className="mb-3">
+                    {/* <label for="answer" className="form-label">Answer</label> */}
+                    <input type="text" value={answer} onChange={
+                            (e) => setAnswer(e.target.value)} className="form-control" placeholder="Enter Your Favoutite sports" required />
+                </div>
+                
+                <button type="submit" className="btn btn-primary">REGISTER</button>
+            </form>
         </div>
+        </>
+    );
+};
 
-    </>
-}
 
-export default register
+export default Register;

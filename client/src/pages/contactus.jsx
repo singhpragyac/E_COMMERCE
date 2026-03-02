@@ -7,5 +7,5 @@ var contact = () => {
         </>
         </Layout>
     )
-}
-export default contact
+};
+export default contact;

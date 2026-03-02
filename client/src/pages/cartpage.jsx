@@ -7,6 +7,6 @@ var cart = () => {
             <button className="btn btn-danger">Click Me</button>
             </>
         </Layout>
-    )
-}
-export default cart
+    );
+};
+export default cart;

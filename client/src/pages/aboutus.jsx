@@ -7,5 +7,5 @@ var abt = () => {
         </>
       </Layout>
     )
-}
-export default abt
+};
+export default abt;
